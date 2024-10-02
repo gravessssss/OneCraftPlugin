@@ -1,6 +1,6 @@
 name: OneCraftPlugin
 main: com.danrom.onecraftplugin.Main
-version: 1.3
+version: 0.1.4_test_build
 api-version: '1.21'
 
 commands:
@@ -10,6 +10,8 @@ commands:
     description: "Makes the player immune to plugin."
   oclist:
     description: "Displays the list of players and their crafted items."
+  ocimmunelist:
+    description: "Displays the list of immune players and their crafted items."
   ocresethash:
     description: "Resets the crafted items for all or a specific player."
 

@@ -27,6 +27,7 @@ public final class Main extends JavaPlugin implements Listener {
         Objects.requireNonNull(this.getCommand("ocver")).setExecutor(this);
         Objects.requireNonNull(this.getCommand("ocimmune")).setExecutor(this);
         Objects.requireNonNull(this.getCommand("oclist")).setExecutor(this);
+        Objects.requireNonNull(this.getCommand("ocimmunelist")).setExecutor(this);
         Objects.requireNonNull(this.getCommand("ocresethash")).setExecutor(this);
     }
 
@@ -105,6 +106,28 @@ public final class Main extends JavaPlugin implements Listener {
                 return true;
             } else {
                 sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /oclist");
+                return false;
+            }
+        }
+        // ------------------------------------------------------------------------------------------------------------
+        if (command.getName().equalsIgnoreCase("ocimmunelist")) {
+            if (args.length == 0) {
+                StringBuilder message = new StringBuilder(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Players immune:\n");
+                for (UUID playerUUID : playersImmune.keySet()) {
+                    Player player = Bukkit.getPlayer(playerUUID);
+                    if (player != null) {
+                        String playerName = player.getName();
+                        HashSet<Material> craftedItems = playersImmune.get(playerUUID);
+                        message.append(ChatColor.GREEN).append(playerName).append(": ")
+                                .append(ChatColor.YELLOW).append(craftedItems.toString()).append("\n");
+                    } else {
+                        message.append(ChatColor.RED).append("Player with UUID: ").append(playerUUID).append(" is offline.\n");
+                    }
+                }
+                sender.sendMessage(message.toString());
+                return true;
+            } else {
+                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocimmunelist");
                 return false;
             }
         }
