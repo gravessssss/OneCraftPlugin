@@ -11,4 +11,6 @@ Commands:
 
 /oclist : Shows the list of players and their crafted items.
 
+/ocimmunelist : Shows the list of immune players.
+
 /ocresethash for all player or /ocresethash "playername" : Resets the crafted items for all or a specific player. 
