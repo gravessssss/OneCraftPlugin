@@ -1,6 +1,6 @@
 name: OneCraftPlugin
 main: com.danrom.onecraftplugin.Main
-version: 0.1.4_test_build
+version: 1.4
 api-version: '1.21'
 
 commands:
