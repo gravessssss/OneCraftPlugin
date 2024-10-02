@@ -1,3 +1,5 @@
+# OneCraftPlugin
+
 A minecraft 1.21 plugin in which you can't craft items more than once. (Spigot/Paper)
 
 
