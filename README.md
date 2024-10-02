@@ -9,4 +9,4 @@ Commands:
 
 /oclist : Shows the list of players and their crafted items.
 
-/ocresethash for all player or /ocresethash "playername" : Resets the crafted items for all or a specific player.
+/ocresethash for all player or /ocresethash "playername" : Resets the crafted items for all or a specific player. 
