@@ -59,99 +59,105 @@ public final class Main extends JavaPlugin implements Listener {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, Command command, @NotNull String label, String[] args) {
         // ------------------------------------------------------------------------------------------------------------
-        if (command.getName().equalsIgnoreCase("ocver")) {
-            String version = this.getDescription().getVersion();
-            if (args.length == 0) {
-                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Current version: " + ChatColor.GREEN + version);
-                return true;
-            } else {
-                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocver");
-                return false;
-            }
-        }
-        // ------------------------------------------------------------------------------------------------------------
-        if (command.getName().equalsIgnoreCase("ocimmune")) {
-            if (args.length == 1) {
-                Player target = Bukkit.getPlayer(args[0]);
-                if (target != null) {
-                    UUID playerUUID = target.getUniqueId();
-                    playersImmune.putIfAbsent(playerUUID, new HashSet<>());
-                    target.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "You are immune now!");
-                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + target.getName() + " is immune now!");
+            if (command.getName().equalsIgnoreCase("ocver")) {
+                String version = this.getDescription().getVersion();
+                if (args.length == 0) {
+                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Current version: " + ChatColor.GREEN + version);
+                    return true;
                 } else {
-                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.RED + "Player not found or offline.");
+                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocver");
+                    return false;
                 }
-                return true;
-            } else {
-                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocimmune <player>");
-                return false;
             }
-        }
-        // ------------------------------------------------------------------------------------------------------------
-        if (command.getName().equalsIgnoreCase("oclist")) {
-            if (args.length == 0) {
-                StringBuilder message = new StringBuilder(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Crafted items by players:\n");
-                for (UUID playerUUID : playersWhoCrafted.keySet()) {
-                    Player player = Bukkit.getPlayer(playerUUID);
-                    if (player != null) {
-                        String playerName = player.getName();
-                        HashSet<Material> craftedItems = playersWhoCrafted.get(playerUUID);
-                        message.append(ChatColor.GREEN).append(playerName).append(": ")
-                                .append(ChatColor.YELLOW).append(craftedItems.toString()).append("\n");
+            // ------------------------------------------------------------------------------------------------------------
+        Player p = (Player) sender;
+        if (p.isOp()) {
+            if (command.getName().equalsIgnoreCase("ocimmune")) {
+                if (args.length == 1) {
+                    Player target = Bukkit.getPlayer(args[0]);
+                    if (target != null) {
+                        UUID playerUUID = target.getUniqueId();
+                        playersImmune.putIfAbsent(playerUUID, new HashSet<>());
+                        target.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "You are immune now!");
+                        sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + target.getName() + " is immune now!");
                     } else {
-                        message.append(ChatColor.RED).append("Player with UUID: ").append(playerUUID).append(" is offline.\n");
+                        sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.RED + "Player not found or offline.");
                     }
-                }
-                sender.sendMessage(message.toString());
-                return true;
-            } else {
-                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /oclist");
-                return false;
-            }
-        }
-        // ------------------------------------------------------------------------------------------------------------
-        if (command.getName().equalsIgnoreCase("ocimmunelist")) {
-            if (args.length == 0) {
-                StringBuilder message = new StringBuilder(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Players immune:\n");
-                for (UUID playerUUID : playersImmune.keySet()) {
-                    Player player = Bukkit.getPlayer(playerUUID);
-                    if (player != null) {
-                        String playerName = player.getName();
-                        HashSet<Material> craftedItems = playersImmune.get(playerUUID);
-                        message.append(ChatColor.GREEN).append(playerName).append(": ")
-                                .append(ChatColor.YELLOW).append(craftedItems.toString()).append("\n");
-                    } else {
-                        message.append(ChatColor.RED).append("Player with UUID: ").append(playerUUID).append(" is offline.\n");
-                    }
-                }
-                sender.sendMessage(message.toString());
-                return true;
-            } else {
-                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocimmunelist");
-                return false;
-            }
-        }
-        // ------------------------------------------------------------------------------------------------------------
-        if (command.getName().equalsIgnoreCase("ocresethash")) {
-            if (args.length == 0) {
-                playersWhoCrafted.clear();
-                playersImmune.clear();
-                sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Everyone can craft now!");
-                return true;
-            } else if (args.length == 1) {
-                Player target = Bukkit.getPlayer(args[0]);
-                if (target != null) {
-                    UUID targetUUID = target.getUniqueId();
-                    playersWhoCrafted.remove(targetUUID);
-                    playersImmune.remove(targetUUID);
-                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + target.getName() + " can craft now!");
+                    return true;
                 } else {
-                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.RED + "Player not found or offline.");
+                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocimmune <player>");
+                    return false;
                 }
-                return true;
+            }
+            // ------------------------------------------------------------------------------------------------------------
+            if (command.getName().equalsIgnoreCase("oclist")) {
+                if (args.length == 0) {
+                    StringBuilder message = new StringBuilder(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Crafted items by players:\n");
+                    for (UUID playerUUID : playersWhoCrafted.keySet()) {
+                        Player player = Bukkit.getPlayer(playerUUID);
+                        if (player != null) {
+                            String playerName = player.getName();
+                            HashSet<Material> craftedItems = playersWhoCrafted.get(playerUUID);
+                            message.append(ChatColor.GREEN).append(playerName).append(": ")
+                                    .append(ChatColor.YELLOW).append(craftedItems.toString()).append("\n");
+                        } else {
+                            message.append(ChatColor.RED).append("Player with UUID: ").append(playerUUID).append(" is offline.\n");
+                        }
+                    }
+                    sender.sendMessage(message.toString());
+                    return true;
+                } else {
+                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /oclist");
+                    return false;
+                }
+            }
+            // ------------------------------------------------------------------------------------------------------------
+            if (command.getName().equalsIgnoreCase("ocimmunelist")) {
+                if (args.length == 0) {
+                    StringBuilder message = new StringBuilder(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Players immune:\n");
+                    for (UUID playerUUID : playersImmune.keySet()) {
+                        Player player = Bukkit.getPlayer(playerUUID);
+                        if (player != null) {
+                            String playerName = player.getName();
+                            playersImmune.get(playerUUID);
+                            message.append(ChatColor.GREEN).append(playerName).append(", ").append("\n");
+                        } else {
+                            message.append(ChatColor.RED).append("Player with UUID: ").append(playerUUID).append(" is offline.\n");
+                        }
+                    }
+                    sender.sendMessage(message.toString());
+                    return true;
+                } else {
+                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.DARK_RED + "Usage: /ocimmunelist");
+                    return false;
+                }
+            }
+            // ------------------------------------------------------------------------------------------------------------
+            if (command.getName().equalsIgnoreCase("ocresethash")) {
+                if (args.length == 0) {
+                    playersWhoCrafted.clear();
+                    playersImmune.clear();
+                    sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + "Everyone can craft now!");
+                    return true;
+                } else if (args.length == 1) {
+                    Player target = Bukkit.getPlayer(args[0]);
+                    if (target != null) {
+                        UUID targetUUID = target.getUniqueId();
+                        playersWhoCrafted.remove(targetUUID);
+                        playersImmune.remove(targetUUID);
+                        sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.GOLD + target.getName() + " can craft now!");
+                    } else {
+                        sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.RED + "Player not found or offline.");
+                    }
+                    return true;
+                }
+                return false;
             }
             return false;
         }
-        return false;
+        else {
+            sender.sendMessage(ChatColor.DARK_GRAY + "[OneCraft] " + ChatColor.RED + "Only Admin can use this command!");
+            return false;
+        }
     }
 }
